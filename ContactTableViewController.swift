@@ -7,7 +7,7 @@
 //
 
 import UIKit
-//0) Add Import Statements for CoreDate
+//0) Add Import Statements for CoreDate and Foundation
 import CoreData
 import Foundation
 
@@ -37,7 +37,7 @@ class ContactTableViewController: UITableViewController, UITableViewDelegate {
     {
         
         let appDelegate =
-        UIApplication.sharedApplication().delegate as AppDelegate
+        UIApplication.sharedApplication().delegate as! AppDelegate
         
         let managedContext = appDelegate.managedObjectContext!
         
@@ -49,7 +49,7 @@ class ContactTableViewController: UITableViewController, UITableViewDelegate {
         
         let fetchedResults =
         managedContext.executeFetchRequest(fetchRequest,
-            error: &error) as [NSManagedObject]?
+            error: &error) as! [NSManagedObject]?
         
         if let results = fetchedResults {
             contactArray = results
@@ -89,10 +89,10 @@ class ContactTableViewController: UITableViewController, UITableViewDelegate {
 //7) Uncomment & Change to below to load rows
         let cell =
         tableView.dequeueReusableCellWithIdentifier("Cell")
-            as UITableViewCell
+           as! UITableViewCell
         
         let person = contactArray[indexPath.row]
-        cell.textLabel.text = person.valueForKey("fullname") as String?
+        cell.textLabel?.text = person.valueForKey("fullname") as! String?
         cell.detailTextLabel?.text = ">>"
         
         return cell
@@ -119,7 +119,7 @@ class ContactTableViewController: UITableViewController, UITableViewDelegate {
 //11 Change to delete swiped row
         if editingStyle == .Delete {
             let appDelegate =
-            UIApplication.sharedApplication().delegate as AppDelegate
+            UIApplication.sharedApplication().delegate as! AppDelegate
             let context = appDelegate.managedObjectContext!
             context.deleteObject(contactArray[indexPath.row])
             var error: NSError? = nil

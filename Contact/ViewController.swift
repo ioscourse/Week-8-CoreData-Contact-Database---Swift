@@ -16,7 +16,7 @@ class ViewController: UIViewController {
     //1) Add ManagedObject Data Context
     let managedObjectContext =
     (UIApplication.sharedApplication().delegate
-        as AppDelegate).managedObjectContext
+        as! AppDelegate).managedObjectContext
     //2) Add variable contactdb (used from UITableView
     var contactdb:NSManagedObject!
 
@@ -71,45 +71,16 @@ class ViewController: UIViewController {
         
     }
     
-    @IBAction func btnFind(sender: UIButton) {
-        //5 Add Find Logic
-        let entityDescription =
-        NSEntityDescription.entityForName("Contact",
-            inManagedObjectContext: managedObjectContext!)
-        
-        let request = NSFetchRequest()
-        request.entity = entityDescription
-        
-        let pred = NSPredicate(format: "(fullname = %@)", fullname.text)
-        request.predicate = pred
-        
-        var error: NSError?
-        
-        var objects = managedObjectContext?.executeFetchRequest(request,
-            error: &error)
-        
-        if let results = objects {
-            
-            if results.count > 0 {
-                let match = results[0] as NSManagedObject
-                
-                fullname.text = match.valueForKey("fullname") as String
-                email.text = match.valueForKey("email") as String
-                phone.text = match.valueForKey("phone") as String
-                status.text = "Matches found: \(results.count)"
-            } else {
-                status.text = "No Match"
-            }
+    
+    //5 Add to hide keyboard
+    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
+        if let touch = touches.first as? UITouch {
+            DismissKeyboard()
         }
-
-    }
-    //6 Add to hide keyboard
-    override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
-        //forces resign first responder and hides keyboard
-        DismissKeyboard()
+        super.touchesBegan(touches , withEvent:event)
     }
     
-    //7 Add to hide keyboard
+    //6 Add to hide keyboard
     func DismissKeyboard(){
         //forces resign first responder and hides keyboard
         fullname.endEditing(true)
@@ -117,7 +88,7 @@ class ViewController: UIViewController {
         phone.endEditing(true)
         
     }
-    //8 Add to hide keyboard
+    //7 Add to hide keyboard
     func textFieldShouldReturn(textField: UITextField!) -> Bool     {
         textField.resignFirstResponder()
         return true;
@@ -128,12 +99,12 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        //9 Add logic to load db. If contactdb has content that means a row was tapped on UiTableView
+        //8 Add logic to load db. If contactdb has content that means a row was tapped on UiTableView
         if (contactdb != nil)
         {
-            fullname.text = contactdb.valueForKey("fullname") as String
-            email.text = contactdb.valueForKey("email") as String
-            phone.text = contactdb.valueForKey("phone") as String
+            fullname.text = contactdb.valueForKey("fullname") as! String
+            email.text = contactdb.valueForKey("email") as! String
+            phone.text = contactdb.valueForKey("phone") as! String
             btnSave.setTitle("Update", forState: UIControlState.Normal)
         }
         fullname.becomeFirstResponder()
